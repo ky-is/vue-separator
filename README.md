@@ -17,9 +17,9 @@ This becomes:
   <span slot="separator">, </span>
 </v-separate>
 ```
-Or with any arbitrary list of elements:
+Or with any arbitrary list of elements, and a div container:
 ```html
-<v-separate>
+<v-separate tag="div" class="my-container">
   <span>A</span><span>B</span><span>C</span>
   <span slot="separator">, </span>
 </v-separate>
@@ -54,3 +54,7 @@ Vue.component('v-separate', VueSeparator)
 ```
 
 Use a `<template>` tag for the separator slot if you dont care about whitespace/styling.
+
+### Props
+
+- `tag` (String, optional): Renders a container element of this tag around the children.
