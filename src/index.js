@@ -3,24 +3,30 @@ export default {
 
 	functional: true,
 
+	props: {
+		tag: null,
+	},
+
 	render (createElement, context) {
+		let children = null
 		const slots = context.slots()
-		const elements = slots.default
-		if (!elements) {
-			return null
-		}
-		const separator = slots.separator
-		if (!separator) {
-			return elements
-		}
-		const children = []
-		const lastIndex = elements.length - 1
-		for (let index = 0; index <= lastIndex; index += 1) {
-			children.push(elements[index])
-			if (index < lastIndex) {
-				children.push(separator)
+		const slotChildren = slots.default
+		if (slotChildren) {
+			const separator = slots.separator
+			if (!separator) {
+				children = slotChildren
+			} else {
+				children = []
+				const lastIndex = slotChildren.length - 1
+				for (let index = 0; index <= lastIndex; index += 1) {
+					children.push(slotChildren[index])
+					if (index < lastIndex) {
+						children.push(separator)
+					}
+				}
 			}
 		}
-		return children
+		const tag = context.props.tag
+		return tag ? createElement(tag, context.data, children) : children
 	},
 }
