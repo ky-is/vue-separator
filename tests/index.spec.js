@@ -1,15 +1,16 @@
 import { mount, createLocalVue } from '@vue/test-utils'
 
-import VueSeparator from '@/index.js'
+import VueSeparator from '@/index.vue'
 
 const localVue = createLocalVue()
-localVue.component(VueSeparator.name, VueSeparator)
+const vSeparatorName = VueSeparator.name
+localVue.component(vSeparatorName, VueSeparator)
 
 function expectSeparator (tag, separatorSlot, defaultSlot, dataArray) {
 	const slots = (separatorSlot || '') + (Array.isArray(defaultSlot) ? defaultSlot.join('') : (defaultSlot || ''))
 	const dataString = dataArray ? dataArray.join(' ') : ''
 	const component = {
-		template: `<div><v-separate tag="${tag || ''}" ${dataString}>${slots}</v-separate></div>`
+		template: `<div><${vSeparatorName} tag="${tag || ''}" ${dataString}>${slots}</${vSeparatorName}></div>`
 	}
 	const wrapper = mount(component, { localVue })
 	return expect(wrapper.html().slice(5, -6))
@@ -23,7 +24,7 @@ const RESULT_EMPTY = '<!---->'
 
 // Test
 
-describe('index.js', () => {
+describe('index.vue', () => {
 	describe('no children', () => {
 		it('renders nothing', () => {
 			expectSeparator().toEqual(RESULT_EMPTY)

@@ -1,3 +1,4 @@
+<script>
 export default {
 	name: 'v-separate',
 
@@ -30,3 +31,4 @@ export default {
 		return tag ? createElement(tag, context.data, children) : children
 	},
 }
+</script>

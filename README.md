@@ -4,7 +4,7 @@ A renderless functional component that adds a separator between any sequence of 
 
 ## Install
 
-Note: This module is not currently available pre-built to ES5. As such, your project will need a build step to use it. Or just copy in `src/index.js` directly.
+Note: This module is not currently available pre-built to ES5. As such, your project will need a build step to use it. Or just copy in `src/index.vue` directly.
 
 ```bash
 npm install --save-dev @ky-is/vue-separator
