@@ -8,11 +8,11 @@ const localVue = createLocalVue()
 const vSeparatorName = VueSeparator.name
 localVue.component(vSeparatorName, VueSeparator)
 
-function expectSeparator ({ tag, slot, content, attributes }) {
+function expectSeparator ({ tag, separator, slot, content, attributes }) {
 	const slots = (slot || '') + (Array.isArray(content) ? content.join('') : (content || ''))
 	const attrsString = attributes ? attributes.join(' ') : ''
 	const component = {
-		template: `<div><${vSeparatorName} tag="${tag || ''}" ${attrsString}>${slots}</${vSeparatorName}></div>`,
+		template: `<div><${vSeparatorName} tag="${tag || ''}" separator="${separator || ''}" ${attrsString}>${slots}</${vSeparatorName}></div>`,
 	}
 	const wrapper = mount(component, { localVue })
 	return expect(wrapper.html().slice(5, -6))
@@ -54,7 +54,7 @@ describe('index.vue', () => {
 		describe('data properties', () => {
 			const attributes = [ 'class="container"', 'data-id="1"', 'id="2"' ]
 			it('renders on container', () => {
-				const expectHtml = expectSeparator({ tag, attributes }, null, null, )
+				const expectHtml = expectSeparator({ tag, attributes })
 				for (const prop of attributes) {
 					expectHtml.toMatch(` ${prop}`)
 				}
@@ -76,6 +76,17 @@ describe('index.vue', () => {
 			const content = '<span />'
 			const attributes = [ 'v-if="false"' ]
 			expectSeparator({ tag, slot: SEPARATOR_TEMPLATE_SLOT, content, attributes }).toEqual(RESULT_EMPTY)
+		})
+	})
+
+	describe('separator prop', () => {
+		const content = [ '<span>1</span>', '<span>2</span>' ]
+		const separator = SEPARATOR
+		it('separates children with text', () => {
+			expectSeparator({ separator, content }).toEqual(content.join(separator))
+		})
+		it('is overridden by separator slot', () => {
+			expectSeparator({ slot: SEPARATOR_SPAN_SLOT, separator, content }).toEqual(content.join(SEPARATOR_SPAN))
 		})
 	})
 
