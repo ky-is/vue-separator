@@ -1,6 +1,6 @@
 <script>
 export default {
-	name: 'v-separate',
+	name: 'VSeparate',
 
 	functional: true,
 
