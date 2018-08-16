@@ -2,15 +2,17 @@ import { mount, createLocalVue } from '@vue/test-utils'
 
 import VueSeparator from '@/index.vue'
 
+const { describe, expect, it } = global //TODO https://github.com/facebook/jest/issues/4473
+
 const localVue = createLocalVue()
 const vSeparatorName = VueSeparator.name
 localVue.component(vSeparatorName, VueSeparator)
 
-function expectSeparator (tag, separatorSlot, defaultSlot, dataArray) {
-	const slots = (separatorSlot || '') + (Array.isArray(defaultSlot) ? defaultSlot.join('') : (defaultSlot || ''))
-	const dataString = dataArray ? dataArray.join(' ') : ''
+function expectSeparator ({ tag, slot, content, attributes }) {
+	const slots = (slot || '') + (Array.isArray(content) ? content.join('') : (content || ''))
+	const attrsString = attributes ? attributes.join(' ') : ''
 	const component = {
-		template: `<div><${vSeparatorName} tag="${tag || ''}" ${dataString}>${slots}</${vSeparatorName}></div>`
+		template: `<div><${vSeparatorName} tag="${tag || ''}" ${attrsString}>${slots}</${vSeparatorName}></div>`,
 	}
 	const wrapper = mount(component, { localVue })
 	return expect(wrapper.html().slice(5, -6))
@@ -27,17 +29,17 @@ const RESULT_EMPTY = '<!---->'
 describe('index.vue', () => {
 	describe('no children', () => {
 		it('renders nothing', () => {
-			expectSeparator().toEqual(RESULT_EMPTY)
-			expectSeparator(null, SEPARATOR_TEMPLATE_SLOT, null).toEqual(RESULT_EMPTY)
-			expectSeparator('div', SEPARATOR_TEMPLATE_SLOT, null).toEqual(`<div></div>`)
+			expectSeparator({}).toEqual(RESULT_EMPTY)
+			expectSeparator({ slot: SEPARATOR_TEMPLATE_SLOT }).toEqual(RESULT_EMPTY)
+			expectSeparator({ tag: 'div', slot: SEPARATOR_TEMPLATE_SLOT }).toEqual(`<div></div>`)
 		})
 	})
 
 	describe('no separator', () => {
 		it('only renders children', () => {
 			const content = '<span></span><div class="a"></div>'
-			expectSeparator(null, null, content).toEqual(content)
-			expectSeparator('nav', null, content).toEqual(`<nav>${content}</nav>`)
+			expectSeparator({ content }).toEqual(content)
+			expectSeparator({ tag: 'nav', content }).toEqual(`<nav>${content}</nav>`)
 		})
 	})
 
@@ -45,21 +47,21 @@ describe('index.vue', () => {
 		const tag = 'div'
 		it('renders an empty container element provided no content', () => {
 			const result = '<div></div>'
-			expectSeparator(tag).toEqual(result)
-			expectSeparator(tag, SEPARATOR_TEMPLATE_SLOT, null).toEqual(result)
+			expectSeparator({ tag }).toEqual(result)
+			expectSeparator({ tag, slot: SEPARATOR_TEMPLATE_SLOT }).toEqual(result)
 		})
 
 		describe('data properties', () => {
-			const properties = [ 'class="container"', 'data-id="1"', 'id="2"' ]
+			const attributes = [ 'class="container"', 'data-id="1"', 'id="2"' ]
 			it('renders on container', () => {
-				const expectHtml = expectSeparator(tag, null, null, properties)
-				for (const prop of properties) {
+				const expectHtml = expectSeparator({ tag, attributes }, null, null, )
+				for (const prop of attributes) {
 					expectHtml.toMatch(` ${prop}`)
 				}
 			})
 			it('renders no properties without tag', () => {
-				const expectHtml = expectSeparator(null, null, null, properties)
-				for (const prop of properties) {
+				const expectHtml = expectSeparator({ attributes })
+				for (const prop of attributes) {
 					expectHtml.not.toMatch(` ${prop}`)
 				}
 			})
@@ -71,26 +73,28 @@ describe('index.vue', () => {
 			for (const prop of consumedProperties) {
 				expectHtml.not.toMatch(` ${prop}`)
 			}
-			expectSeparator(tag, SEPARATOR_TEMPLATE_SLOT, '<span />', [ 'v-if="false"' ]).toEqual(RESULT_EMPTY)
+			const content = '<span />'
+			const attributes = [ 'v-if="false"' ]
+			expectSeparator({ tag, slot: SEPARATOR_TEMPLATE_SLOT, content, attributes }).toEqual(RESULT_EMPTY)
 		})
 	})
 
 	it('renders single children without separators', () => {
 		const content = '<span>1</span>'
-		expectSeparator(null, content).toEqual(content)
-		expectSeparator('div', SEPARATOR_TEMPLATE_SLOT, content).toEqual(`<div>${content}</div>`)
+		expectSeparator({ content }).toEqual(content)
+		expectSeparator({ tag: 'div', slot: SEPARATOR_TEMPLATE_SLOT, content }).toEqual(`<div>${content}</div>`)
 	})
 
 	it('intersperses separators between items', () => {
-		const items = [ '<span>1</span>', '<span>2</span>' ]
-		expectSeparator(null, SEPARATOR_TEMPLATE_SLOT, items).toEqual(items.join(SEPARATOR))
-		expectSeparator('div', SEPARATOR_SPAN_SLOT, items).toEqual(`<div>${items.join(SEPARATOR_SPAN)}</div>`)
+		const content = [ '<span>1</span>', '<span>2</span>' ]
+		expectSeparator({ slot: SEPARATOR_TEMPLATE_SLOT, content }).toEqual(content.join(SEPARATOR))
+		expectSeparator({ tag: 'div', slot: SEPARATOR_SPAN_SLOT, content }).toEqual(`<div>${content.join(SEPARATOR_SPAN)}</div>`)
 	})
 
 	it('renders v-for with separators', () => {
-		const items = '<span v-for="item in [1, 2, 3]" :key="item">{{ item }}</span>'
+		const content = '<span v-for="item in [1, 2, 3]" :key="item">{{ item }}</span>'
 		const result = '<span>1</span><span>, </span><span>2</span><span>, </span><span>3</span>'
-		expectSeparator(null, SEPARATOR_SPAN_SLOT, items).toEqual(result)
-		expectSeparator('li', SEPARATOR_SPAN_SLOT, items).toEqual(`<li>${result}</li>`)
+		expectSeparator({ slot: SEPARATOR_SPAN_SLOT, content }).toEqual(result)
+		expectSeparator({ tag: 'li', slot: SEPARATOR_SPAN_SLOT, content }).toEqual(`<li>${result}</li>`)
 	})
 })
