@@ -28,21 +28,24 @@ Say you want to render a list of items, with a comma between each item, without 
 
 That becomes:
 ```html
-<v-separate>
+<v-separate separator=", ">
   <span v-for="item in items" :key="item">{{ item }}</span>
+</v-separate>
+```
+
+Or, with any arbitrary list of elements, and a slot-based HTML template for the separator:
+```html
+<v-separate tag="div" class="my-container">
+  <span>A</span><span>B</span><span>C</span>
   <span slot="separator">, </span>
 </v-separate>
 ```
 
-Or with any arbitrary list of elements, and a div container:
-```html
-<v-separate tag="div" class="my-container">
-  <span>A</span><span>B</span><span>C</span>
-  <template slot="separator">, </template>
-</v-separate>
-```
-Use a `<template>` tag for the separator slot if you dont care about whitespace/styling.
-
  ## Props
 
 - `tag` (String, optional): Renders a container element of this tag around the children.
+- `separator` (String, optional): A plaintext string to be rendered between each child. This is overridden by `slot="separator"` if provided.
+
+## `separator` slot
+
+Only use the separator slot if you need the separator to render HTML. Because `slot="separator"` is duplicated between each element, it loses its reactivity and won't automatically update. Thus, to change its contents, you'll need to remove and replace the v-separator container.

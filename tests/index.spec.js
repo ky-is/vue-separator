@@ -23,10 +23,11 @@ const SEPARATOR_TEMPLATE_SLOT = `<template slot="separator">${SEPARATOR}</templa
 const SEPARATOR_SPAN = `<span>${SEPARATOR}</span>`
 const SEPARATOR_SPAN_SLOT = `<span slot="separator">${SEPARATOR}</span>`
 const RESULT_EMPTY = '<!---->'
+const SEPARATOR_SPAN_RESULT = `&lt;span&gt;${SEPARATOR}&lt;/span&gt;`
 
 // Test
 
-describe('index.vue', () => {
+describe(vSeparatorName, () => {
 	describe('no children', () => {
 		it('renders nothing', () => {
 			expectSeparator({}).toEqual(RESULT_EMPTY)
@@ -87,6 +88,9 @@ describe('index.vue', () => {
 		})
 		it('is overridden by separator slot', () => {
 			expectSeparator({ slot: SEPARATOR_SPAN_SLOT, separator, content }).toEqual(content.join(SEPARATOR_SPAN))
+		})
+		it('does not parse HTML', () => {
+			expectSeparator({ separator: SEPARATOR_SPAN, content }).toEqual(content.join(SEPARATOR_SPAN_RESULT))
 		})
 	})
 
