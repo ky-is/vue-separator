@@ -6,14 +6,16 @@ export default {
 
 	props: {
 		tag: null,
+		separator: null,
 	},
 
 	render (createElement, context) {
 		let children = null
 		const slots = context.slots()
+		const props = context.props
 		const slotChildren = slots.default
 		if (slotChildren) {
-			const separator = slots.separator
+			const separator = slots.separator || props.separator
 			if (!separator) {
 				children = slotChildren
 			} else {
@@ -27,8 +29,7 @@ export default {
 				}
 			}
 		}
-		const tag = context.props.tag
-		return tag ? createElement(tag, context.data, children) : children
+		return props.tag ? createElement(props.tag, context.data, children) : children
 	},
 }
 </script>
