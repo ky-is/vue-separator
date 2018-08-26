@@ -14,7 +14,7 @@ In main.js (alternatively, manually register it in each file you use it):
 ```js
 import VueSeparator from '@ky-is/vue-separator'
 
-Vue.component('v-separate', VueSeparator)
+Vue.component(VueSeparator.name, VueSeparator)
 ```
 
 ## Use cases
@@ -41,11 +41,21 @@ Or, with any arbitrary list of elements, and a slot-based HTML template for the 
 </v-separate>
 ```
 
- ## Props
+### Props
 
 - `tag` (String, optional): Renders a container element of this tag around the children.
 - `separator` (String, optional): A plaintext string to be rendered between each child. This is overridden by `slot="separator"` if provided.
 
-## `separator` slot
+### `separator` slot
 
 Only use the separator slot if you need the separator to render HTML. Because `slot="separator"` is duplicated between each element, it loses its reactivity and won't automatically update. Thus, to change its contents, you'll need to remove and replace the v-separator container.
+
+### Jest
+
+Because vue-separator is bundled as a single file component, it needs to be transformed with `vue-jest` in your test environment. By default, all packages in `node_modules` are skipped, so to allow it to work in your tests, add the following to your `jest.config.js`:
+
+```js
+  transformIgnorePatterns: [
+    'node_modules/(?!@ky-is/vue-separator)',
+  ],
+```
