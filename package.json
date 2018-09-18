@@ -58,7 +58,13 @@
 		}
 	},
 	"eslintConfig": {
-		"extends": "@ky-is/eslint-config/vue"
+		"extends": "@ky-is/eslint-config/vue",
+		"parserOptions": {
+			"ecmaVersion": 5
+		},
+		"rules": {
+			"no-var": 0
+		}
 	},
 	"jest": {
 		"testURL": "http://localhost",
