@@ -5,8 +5,14 @@ export default {
 	functional: true,
 
 	props: {
-		tag: null,
-		separator: null,
+		tag: {
+			type: String,
+			default: undefined,
+		},
+		separator: {
+			type: String,
+			default: undefined,
+		},
 	},
 
 	render (createElement, context) {
