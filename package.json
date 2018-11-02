@@ -9,17 +9,13 @@
 		"type": "git",
 		"url": "git+https://github.com/ky-is/vue-separator.git"
 	},
-	"keywords": [
-		"vue",
-		"markdown",
-		"md"
-	],
 	"bugs": {
 		"url": "https://github.com/ky-is/vue-separator/issues"
 	},
 	"homepage": "https://github.com/ky-is/vue-separator#readme",
 	"scripts": {
-		"test": "jest"
+		"test": "jest",
+		"postshrinkwrap": "sed -i '' -e 's/http:\\/\\//https:\\/\\//g' package-lock.json"
 	},
 	"devDependencies": {
 		"@ky-is/eslint-config": "^1.5.1",
