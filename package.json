@@ -26,11 +26,11 @@
 		"@vue/test-utils": "^1.0.0-beta.25",
 		"babel-jest": "^23.6.0",
 		"babel-preset-env": "^1.7.0",
-		"eslint": "^5.6.0",
+		"eslint": "^5.8.0",
 		"eslint-plugin-vue": "^4.7.1",
 		"jest": "^23.6.0",
 		"vue": "^2.5.16",
-		"vue-jest": "^2.6.0",
+		"vue-jest": "^3.0.0",
 		"vue-template-compiler": "^2.5.16"
 	},
 	"babel": {
@@ -68,6 +68,9 @@
 	},
 	"jest": {
 		"testURL": "http://localhost",
+		"testMatch": [
+			"<rootDir>/tests/**/*.spec.js"
+		],
 		"moduleFileExtensions": [
 			"js",
 			"json",
