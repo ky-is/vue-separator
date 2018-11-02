@@ -1,6 +1,6 @@
 {
 	"name": "@ky-is/vue-separator",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "A renderless component that intersperses elements with a separator.",
 	"main": "src/index.vue",
 	"author": "Kyle Coburn",
