@@ -26,23 +26,22 @@ export default {
 				children = slotChildren
 			} else {
 				children = []
-				var lastIndex = slotChildren.length - 1
+				var slotChildrenCount = slotChildren.length
 				var index = 0, hasChildToSeparate = false
-				while (index <= lastIndex) {
-					var child, nextChild
+				while (index < slotChildrenCount) {
+					var child = slotChildren[index]
 					do {
-						child = slotChildren[index]
 						children.push(child)
 						index += 1
-						if (index > lastIndex) {
+						if (index === slotChildrenCount) {
 							break
 						}
 						if (!hasChildToSeparate && (child.children || child.text)) {
 							hasChildToSeparate = true
 						}
-						nextChild = slotChildren[index]
-					} while (!nextChild.children && !nextChild.text)
-					if (hasChildToSeparate && index < lastIndex) {
+						child = slotChildren[index]
+					} while (!child.children && !child.text)
+					if (hasChildToSeparate && index < slotChildrenCount) {
 						children.push(separator)
 					}
 				}
